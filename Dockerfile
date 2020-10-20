@@ -8,7 +8,7 @@ LABEL maintainer="Sam Wilcock"
 RUN apt-get update && \
     apt-get install -y sudo \
     xterm \
-    curl \
+    curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Configure user
@@ -72,28 +72,10 @@ ENV HOME=/home/$USER \
     VNC_VIEW_ONLY=false
 WORKDIR $HOME
 
-## Add all install scripts for further steps
-ADD ./src/common/install/ $INST_SCRIPTS/
-ADD ./src/ubuntu/install/ $INST_SCRIPTS/
-RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+# Install xfce and no-vnc
+COPY --from=consol/ubuntu-xfce-vnc:latest / / 
 
-## Install some common tools
-RUN $INST_SCRIPTS/tools.sh
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
-
-## Install xvnc-server & noVNC - HTML5 based VNC viewer
-RUN $INST_SCRIPTS/tigervnc.sh
-RUN $INST_SCRIPTS/no_vnc.sh
-
-## Install firefox and chrome browser
-RUN $INST_SCRIPTS/firefox.sh
-RUN $INST_SCRIPTS/chrome.sh
-
-## Install xfce UI
-RUN $INST_SCRIPTS/xfce_ui.sh
-ADD ./src/common/xfce/ $HOME/
-
-## configure startup
+### (Re)configure startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
@@ -103,6 +85,8 @@ COPY --from=rosbridge / /
 
 # Install gazebo
 COPY --from=gazebo:libgazebo11 / /
+
+
 
 # Setup ROS environment
 RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc &&\ 
