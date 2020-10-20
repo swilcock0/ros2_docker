@@ -1,16 +1,15 @@
-FROM ros:foxy-ros-core-focal as ros2
-
 FROM ros:foxy-ros1-bridge-focal as rosbridge
 
-FROM nvidia/cuda:11.0-devel-ubuntu20.04 AS ubuntu
+FROM ros:foxy-ros-core-focal as ros2
 
-LABEL maintainer "Sam Wilcock"
+LABEL maintainer="Sam Wilcock"
 
 # Install sudo
 RUN apt-get update && \
     apt-get install -y sudo \
     xterm \
-    curl
+    curl \
+    rm -rf /var/lib/apt/lists/*
 
 # Configure user
 ARG user=ros
@@ -41,7 +40,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
-    sudo apt-get install -y code
+    sudo apt-get install -y code && \
+    rm -rf /var/lib/apt/lists/*
 
 ### VNC Installation
 LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
@@ -98,9 +98,6 @@ RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
-# Install ROS2
-COPY --from=ros2 / /
-
 # Install rosbridge
 COPY --from=rosbridge / /
 
@@ -108,10 +105,10 @@ COPY --from=rosbridge / /
 COPY --from=gazebo:libgazebo11 / /
 
 # Setup ROS environment
-RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
-RUN echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc
-RUN echo "export _colcon_cd_root=~/ros2_install" >> ~/.bashrc
-RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc &&\ 
+    echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc &&\
+    echo "export _colcon_cd_root=~/ros2_install" >> ~/.bashrc &&\
+    apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # TODO: 
 # Add Catkin??
@@ -119,6 +116,7 @@ RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E
 # Test bridge, see https://index.ros.org/doc/ros2/Installation/Foxy/Linux-Install-Debians/
 # Add danso robots if you can find
 # Add keras, tensorflow
+
 
 # Configure desktop and clean up
 ADD ./src/desktop $HOME/Desktop
@@ -148,5 +146,5 @@ RUN groupadd $USER && \
 
 USER $USER
 
-ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh", "-w", "-d"]
 CMD ["--wait"]
