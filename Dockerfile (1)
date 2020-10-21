@@ -99,19 +99,19 @@ ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 # Install ROS2
-#COPY --from=ros2 / /
+COPY --from=ros2 / /
 
 # Install rosbridge
-#COPY --from=rosbridge / /
+COPY --from=rosbridge / /
 
 # Install gazebo
-#COPY --from=gazebo:libgazebo11 / /
+COPY --from=gazebo:libgazebo11 / /
 
 # Setup ROS environment
-#RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
-#RUN echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc
-#RUN echo "export _colcon_cd_root=~/ros2_install" >> ~/.bashrc
-#RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
+RUN echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc
+RUN echo "export _colcon_cd_root=~/ros2_install" >> ~/.bashrc
+RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # TODO: 
 # Add Catkin??
