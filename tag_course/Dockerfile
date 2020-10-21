@@ -1,8 +1,11 @@
+# Depends on base container
+# Build as (in ros2_ubuntu): docker build -t swilcock0/ros2_ubuntu:course -f ./tag_course/Dockerfile .
 FROM swilcock0/ros2_ubuntu:latest
 
 USER root
 
-RUN apt-get install -y python3-pip ros-foxy-rqt ros-foxy-rqt-common-plugins ros-foxy-turtlesim ros-foxy-rviz2
+RUN apt-get install -y --no-install-recommends python3-pip ros-foxy-rqt ros-foxy-rqt-common-plugins ros-foxy-turtlesim ros-foxy-rviz2 &&\
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade autopep8 -y
 

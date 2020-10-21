@@ -43,13 +43,6 @@ RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get install -y code && \
     rm -rf /var/lib/apt/lists/*
 
-### VNC Installation
-LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
-      io.k8s.display-name="Headless VNC Container based on Ubuntu" \
-      io.openshift.expose-services="6901:http,5901:xvnc" \
-      io.openshift.tags="vnc, ubuntu, xfce" \
-      io.openshift.non-scalable=true
-
 ## Connection ports for controlling the UI:
 # VNC port:5901
 # noVNC webport 6901, connect via http://IP:6901/?password=vncpassword
@@ -73,9 +66,12 @@ ENV HOME=/home/$USER \
 WORKDIR $HOME
 
 # Install xfce and no-vnc
-COPY --from=consol/ubuntu-xfce-vnc:latest / / 
+COPY --from=swilcock0/xfce_novnc / / 
 
 ### (Re)configure startup
+ADD ./src/common/install/ $INST_SCRIPTS/
+ADD ./src/ubuntu/install/ $INST_SCRIPTS/
+RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
