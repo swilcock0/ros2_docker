@@ -7,17 +7,14 @@ help (){
 echo "
 USAGE:
 docker run -it -p 6901:6901 -p 5901:5901 consol/<image>:<tag> <option>
-
 IMAGES:
 consol/ubuntu-xfce-vnc
 consol/centos-xfce-vnc
 consol/ubuntu-icewm-vnc
 consol/centos-icewm-vnc
-
 TAGS:
 latest  stable version of branch 'master'
 dev     current development version of branch 'dev'
-
 OPTIONS:
 -w, --wait      (default) keeps the UI and the vncserver up until SIGINT or SIGTERM will received
 -s, --skip      skip the vnc startup and just execute the assigned command.
@@ -25,7 +22,6 @@ OPTIONS:
 -d, --debug     enables more detailed startup output
                 e.g. 'docker run consol/centos-xfce-vnc --debug bash'
 -h, --help      print out this help
-
 Fore more information see: https://github.com/ConSol/docker-headless-vnc-container
 "
 }
@@ -67,6 +63,12 @@ echo -e "\n------------------ change VNC password  ------------------"
 # first entry is control, second is view (if only one is valid for both)
 mkdir -p "$HOME/.vnc"
 PASSWD_PATH="$HOME/.vnc/passwd"
+
+if [[ -f $PASSWD_PATH ]]; then
+    echo -e "\n---------  purging existing VNC password settings  ---------"
+    rm -f $PASSWD_PATH
+fi
+
 if [[ $VNC_VIEW_ONLY == "true" ]]; then
     echo "start VNC server in VIEW ONLY mode!"
     #create random pw to prevent access
@@ -99,6 +101,7 @@ echo -e "\n\n------------------ VNC environment started ------------------"
 echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer with $VNC_IP:$VNC_PORT"
 echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT/?password=...\n"
 
+
 if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     echo -e "\n------------------ $HOME/.vnc/*$DISPLAY.log ------------------"
     # if option `-t` or `--tail-log` block the execution and tail the VNC log
@@ -109,10 +112,7 @@ if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
     # unknown option ==> call command
-    echo -e "Use roslaunch rosbridge_server rosbridge_websocket.launch if not working"
     echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
     echo "Executing command: '$@'"
     exec "$@"
 fi
-
-wait $PID_SUB

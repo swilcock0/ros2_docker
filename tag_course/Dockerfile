@@ -7,7 +7,7 @@ USER root
 RUN apt-get install -y --no-install-recommends python3-pip ros-foxy-rqt ros-foxy-rqt-common-plugins ros-foxy-turtlesim ros-foxy-rviz2 &&\
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade autopep8 -y
+RUN pip3 install --upgrade autopep8
 
 USER $USER
 
@@ -17,5 +17,5 @@ RUN echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> 
     rm -rf /var/lib/apt/lists/* &&\
     printenv | grep -i ROS
 
-ENTRYPOINT ["/dockerstartup/vnc_startup.sh", "-d"]
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
