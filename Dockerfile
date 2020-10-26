@@ -137,8 +137,7 @@ EXPOSE 8888
 # Expose ROS
 EXPOSE 9090
 
-RUN groupadd $USER && \
-    useradd --create-home --no-log-init -g $USER $USER && \
+RUN useradd --create-home --no-log-init -g $USER $USER && \
     usermod -aG sudo $USER && \
     echo "$PASSWD:$PASSWD" | chpasswd && \
     chsh -s /bin/bash $USER && \
