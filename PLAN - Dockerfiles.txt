@@ -1,0 +1,27 @@
+PLAN - Dockerfiles
+-------------------
+~~~1. Clean and fix base image (in "test" folder) to get novnc working, also to reduce size - see https://hackernoon.com/tips-to-reduce-docker-image-sizes-876095da3b34~~~
+
+1.b Sort NoVNC and desktop env. Maybe VSCode settings too
+
+2. Get "apps" working (ros2-new/Fluff) First moveit, then node
+
+3. Deprecate other tags, work solely from incremental, dockerfile based builds to reduce damage post crash
+
+~~~4. Check that we can use openrave with ros2~~~ We can! Reqs in Changelog
+
+5. Build openrave docker for creating ~~~ikfast~~~, reachability (low priority for reach atm)
+
+6. Test for any missing dependencies with the denso lib
+
+
+NB: For treating
+Errors were encountered while processing:
+#6 590.1  python2.7-minimal
+#6 590.1  python2-minimal
+#6 590.1  python2.7
+
+Last fix involved upgrade-alternatives. test version in base. Check "ros2_ws/Clean"
+
+
+^^^ THINK THIS IS FIXED BY REMOVING PYTHON-NUMPY FROM THE BASE
