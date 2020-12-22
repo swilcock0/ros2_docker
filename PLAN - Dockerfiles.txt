@@ -2,9 +2,9 @@ PLAN - Dockerfiles
 -------------------
 ~~~1. Clean and fix base image (in "test" folder) to get novnc working, also to reduce size - see https://hackernoon.com/tips-to-reduce-docker-image-sizes-876095da3b34~~~
 
-1.b Sort NoVNC and desktop env. Maybe VSCode settings too
+~~~1.b Sort NoVNC and desktop env. Maybe VSCode settings too~~~
 
-2. Get "apps" working (ros2-new/Fluff) First moveit, then node
+2. Get "apps" working (ros2-new/Fluff) ~~~First moveit,~~~ then node
 
 3. Deprecate other tags, work solely from incremental, dockerfile based builds to reduce damage post crash
 

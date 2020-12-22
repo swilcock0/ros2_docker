@@ -41,6 +41,11 @@ RUN sudo apt-get install -y apt-transport-https && \
     sudo apt-get update && \
     sudo apt-get install -y code
 
+    #code --install-extension hookygr.beautify &&\
+    #code --install-extension ms-iot.vscode-ros &&\
+    #code --install-extension ms-python.python &&\
+    #code --install-extension ms-vscode.cpptools
+
 ### VNC Installation
 LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
       io.k8s.display-name="Headless VNC Container based on Ubuntu" \
@@ -88,34 +93,76 @@ RUN $INST_SCRIPTS/firefox.sh
 
 ## Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh && apt-get update && \
-    apt-get install -y --no-install-recommends xfce4 dbus-x11 xauth supervisor xfce4-terminal x11-xserver-utils &&\
+    apt-get install -y --no-install-recommends dbus-x11 xauth supervisor xfce4-terminal x11-xserver-utils gnome-icon-theme &&\
+    gtk-update-icon-cache &&\
+    #xfconf-query -c xsettings -p /Net/ThemeName -s XFCE-D-PRO-1.6 &&\
+    #xfconf-query -c xsettings -p /Net/IconThemeName -s Adwaita &&\
     rm -rf /var/lib/apt/lists/*
 ADD ./src/common/xfce/ $HOME/
 
 ## Install numpy (for xfce) and pip
 RUN apt-get update && apt-get install -y python
 
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install numpy
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install numpy && rm get-pip.py
 
-## Configure startup
+## Configure startup and desktop
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
-RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+ADD ./src/desktop $HOME/Desktop
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME $HOME/Desktop
 
 # Install gazebo, copied from another image
 COPY --from=gazebo:libgazebo11 /usr/ /usr/
 COPY --from=gazebo:libgazebo11 /var/ /var/
 COPY --from=gazebo:libgazebo11 /etc/apt/sources.list.d/gazebo-latest.list /etc/apt/sources.list.d/
+RUN apt-key del 67170598AF249743 && wget -O /tmp/gazebo.key http://packages.osrfoundation.org/gazebo.key && apt-key add /tmp/gazebo.key
 
 # Setup ROS environment
-RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - &&\
+    sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
 
-# Configure desktop and clean up
-ADD ./src/desktop $HOME/Desktop
-RUN $INST_SCRIPTS/set_user_permission.sh $HOME
-RUN apt update
-RUN apt-get autoremove -y && apt-get autoclean -y
+RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --option \
+    Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" python3-colcon-common-extensions build-essential \
+    cmake \
+    git \
+    libbullet-dev \
+    python3-colcon-common-extensions \
+    python3-flake8 \
+    python3-pip \
+    python3-pytest-cov \
+    python3-rosdep \
+    python3-setuptools \
+    python3-vcstool \
+    wget &&\
+    python3 -m pip install -U \
+    argcomplete \
+    flake8-blind-except \
+    flake8-builtins \
+    flake8-class-newline \
+    flake8-comprehensions \
+    flake8-deprecated \
+    flake8-docstrings \
+    flake8-import-order \
+    flake8-quotes \
+    pytest-repeat \
+    pytest-rerunfailures \
+    pytest &&\
+    apt install --no-install-recommends -y \
+    libasio-dev \
+    libtinyxml2-dev &&\
+    sudo apt install --no-install-recommends -y libcunit1-dev &&\
+    rm -rf /var/lib/apt/lists/*"
+
+# Clean
+RUN apt-get update && apt-get autoremove -y && apt-get autoclean -y
 ENV ROS_LOG_DIR=$HOME/Desktop/logs_ros
+
+# Rosdep init
+RUN rosdep init
+
+USER $USER
+
+RUN rosdep update
 
 # Expose Tensorboard
 EXPOSE 6006
@@ -125,7 +172,5 @@ EXPOSE 8888
 
 # Expose ROS
 EXPOSE 9090
-
-USER $USER
 
 CMD ["/dockerstartup/vnc_startup.sh", "--wait"]

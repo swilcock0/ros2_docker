@@ -11,4 +11,5 @@ xset s off &
 
 /usr/bin/startxfce4 --replace > $HOME/wm.log &
 sleep 1
+xfconf-query -c xsettings -p /Net/ThemeName -s XFCE-D-PRO-1.6
 cat $HOME/wm.log

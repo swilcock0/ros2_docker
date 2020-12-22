@@ -7,7 +7,6 @@ USER root
 # Install latest version of moveit
 
 RUN apt-get update &&\
-    rosdep update &&\
     mkdir -p ~/moveit_ws/src && \
     cd ~/moveit_ws/src && \
     wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos &&\
