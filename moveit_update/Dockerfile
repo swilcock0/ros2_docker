@@ -22,4 +22,4 @@ RUN cd ~/moveit_ws &&\
 USER $USER
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
-CMD ["-d --wait"]
+CMD ["--wait"]

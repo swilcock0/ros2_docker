@@ -15,6 +15,7 @@ ARG user=ros
 ARG passwd=ros
 ARG uid=1000
 ARG gid=1000
+ENV DEBIAN_FRONTEND=noninteractive
 ENV USER=$user
 ENV PASSWD=$passwd
 ENV UID=$uid
@@ -150,7 +151,9 @@ RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --op
     apt install --no-install-recommends -y \
     libasio-dev \
     libtinyxml2-dev &&\
-    sudo apt install --no-install-recommends -y libcunit1-dev &&\
+    apt install --no-install-recommends -y libcunit1-dev &&\
+    apt-get install -y --force ros-foxy-rqt* &&\
+    apt upgrade &&\
     rm -rf /var/lib/apt/lists/*"
 
 # Clean
@@ -173,4 +176,5 @@ EXPOSE 8888
 # Expose ROS
 EXPOSE 9090
 
-CMD ["/dockerstartup/vnc_startup.sh", "--wait"]
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
+CMD ["--wait"]
