@@ -4,7 +4,7 @@ PLAN - Dockerfiles
 
 ~~~1.b Sort NoVNC and desktop env. Maybe VSCode settings too~~~
 
-2. Get "apps" working (ros2-new/Fluff) ~~~First moveit,~~~ then ros2-web-bridge
+~~~2. Get "apps" working (ros2-new/Fluff) First moveit, then ros2-web-bridge ~~~
 
 3. Deprecate other tags, work solely from incremental, dockerfile based builds to reduce damage post crash
 

@@ -123,6 +123,7 @@ RUN apt-key del 67170598AF249743 && wget -O /tmp/gazebo.key http://packages.osrf
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - &&\
     sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
 
+
 RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --option \
     Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" python3-colcon-common-extensions build-essential \
     cmake \
@@ -136,7 +137,9 @@ RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --op
     python3-setuptools \
     python3-vcstool \
     wget &&\
-    python3 -m pip install -U \
+    rm -rf /var/lib/apt/lists/*"
+
+RUN python3 -m pip install -U \
     argcomplete \
     flake8-blind-except \
     flake8-builtins \
@@ -148,14 +151,17 @@ RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --op
     flake8-quotes \
     pytest-repeat \
     pytest-rerunfailures \
-    pytest &&\
-    apt install --no-install-recommends -y \
+    pytest
+
+USER root
+
+RUN apt update && apt install --no-install-recommends -y \
     libasio-dev \
     libtinyxml2-dev &&\
     apt install --no-install-recommends -y libcunit1-dev &&\
-    apt-get install -y --force ros-foxy-rqt* &&\
-    apt upgrade &&\
-    rm -rf /var/lib/apt/lists/*"
+    apt-get install -y ros-foxy-rqt* &&\
+    apt upgrade -y &&\
+    rm -rf /var/lib/apt/lists/*
 
 # Clean
 RUN apt-get update && apt-get autoremove -y && apt-get autoclean -y
