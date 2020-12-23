@@ -6,11 +6,6 @@ USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install RQT
-RUN apt update &&\
-    apt install -y ros-foxy-rqt &&\
-    rm -rf /var/lib/apt/lists/*
-
 USER 1000
 
 # Install NVM and node
@@ -22,24 +17,25 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.2/install.sh
 
 # Install ros2-web-bridge
 RUN /bin/bash -c ". ~/.nvm/nvm.sh &&\
-    nvm install 11.0.0"
+    nvm install 12.16.1"
  
+RUN cd ~ &&\
+    git clone https://github.com/swilcock0/ros2-web-bridge.git
+
 RUN /bin/bash -c ". /opt/ros/foxy/setup.sh &&\
     . ~/.nvm/nvm.sh &&\
-    cd ~ &&\
-    git clone https://github.com/RobotWebTools/ros2-web-bridge.git &&\
     cd ros2-web-bridge &&\
-    npm install --save-dev canvas@^2.5.0 &&\
-    npm install --save-dev utf-8-validate@^5.0.2 &&\
-    npm install --save-dev bufferutil@^4.0.1 &&\
     npm install"
 
 # Install ros2api
 RUN mkdir -p ~/ros2api/src &&\
-    git clone https://github.com/mwamp/ros2api.git ros2api/src &&\
+    git clone https://github.com/swilcock0/ros2api.git ros2api/src &&\
     cd ~/ros2api &&\
     . /opt/ros/foxy/setup.sh &&\
     colcon build
+
+# Clean generated messages
+RUN rm -rf /home/ros/ros2-web-bridge/node_modules/rclnodejs/generated
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]

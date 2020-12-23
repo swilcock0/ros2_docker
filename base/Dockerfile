@@ -16,6 +16,7 @@ ARG passwd=ros
 ARG uid=1000
 ARG gid=1000
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DONT_PROMPT_WSL_INSTALL=1
 ENV USER=$user
 ENV PASSWD=$passwd
 ENV UID=$uid
