@@ -12,7 +12,7 @@ PLAN - Dockerfiles
 
 5. Build openrave docker for creating ~~~ikfast~~~, reachability (low priority for reach atm)
 
-6. Test for any missing dependencies with the denso lib
+~~~6. Test for any missing dependencies with the denso lib~~~
 
 
 NB: For treating

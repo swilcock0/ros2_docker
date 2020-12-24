@@ -1,5 +1,5 @@
 # ROSUbuntu
- ROS build on Ubuntu, packaged with tensorflow, universal robots files
+ROS build for Docker, incremental base->moveit_update->moveit_bridge.
 
 
-Based on [henry2423/docker-ros-vnc](https://github.com/henry2423/docker-ros-vnc)
+Based loosely on [henry2423/docker-ros-vnc](https://github.com/henry2423/docker-ros-vnc)
