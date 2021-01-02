@@ -159,7 +159,7 @@ RUN apt update && apt install --no-install-recommends -y \
     libasio-dev \
     libtinyxml2-dev &&\
     apt install --no-install-recommends -y libcunit1-dev &&\
-    apt-get install -y ros-foxy-rqt* &&\
+    apt-get install -y ros-foxy-rqt* ros-foxy-gazebo* &&\
     apt upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
