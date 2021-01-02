@@ -29,7 +29,8 @@ RUN apt-get update &&\
     git checkout 3d542bb045860cdc7e7338c2e16a73985e387511 &&\
     cd .. &&\
     . /opt/ros/foxy/setup.sh &&\
-    colcon build
+    colcon build &&\
+    rm -rf /var/lib/apt/lists/*
 
 # Install Gazebo ROS2 control
 RUN mkdir -p ~/repos/gazebo_ros2_control/src &&\
