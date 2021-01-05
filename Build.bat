@@ -15,6 +15,8 @@ docker image tag swilcock0/ros2_ubuntu:moveit_bridge swilcock0/ros2_ubuntu:lates
 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-docker push swilcock0/ros2_ubuntu:latest
+nircmd beep 450 2000
+pause
+docker push swilcock0/ros2_ubuntu
 
 echo Done!

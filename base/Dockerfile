@@ -124,7 +124,7 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sud
     sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
 
 
-RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --option \
+RUN sh -c "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends --option \
     Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" python3-colcon-common-extensions build-essential \
     cmake \
     git \
