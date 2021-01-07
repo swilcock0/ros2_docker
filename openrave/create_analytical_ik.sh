@@ -19,7 +19,7 @@ openrave-robot.py "$MYROBOT_NAME".dae --info links
 export PLANNING_GROUP="arm"
 
 export BASE_LINK="0"
-export EEF_LINK="9"
+export EEF_LINK="10"
 
 export IKFAST_OUTPUT_PATH=`pwd`/ikfast61_"$PLANNING_GROUP".cpp
 python `openrave-config --python-dir`/openravepy/_openravepy_/ikfast.py --robot="$MYROBOT_NAME".dae --iktype=transform6d --baselink="$BASE_LINK" --eelink="$EEF_LINK" --savefile="$IKFAST_OUTPUT_PATH"

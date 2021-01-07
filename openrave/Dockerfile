@@ -15,4 +15,6 @@ RUN pip install scipy
 
 ADD ./create_analytical_ik.sh /bin/create_analytical_ik.sh
 
+RUN chmod +x /bin/create_analytical_ik.sh
+
 ENTRYPOINT [ "/bin/bash" ]
