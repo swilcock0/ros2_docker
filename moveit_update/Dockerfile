@@ -24,8 +24,6 @@ RUN apt-get update &&\
     apt-get install -y ros-foxy-test-msgs libopenblas-dev &&\
     rm -rf /var/lib/apt/lists/*
 
-USER $USER
-
 # Install ros2 control
 # RUN mkdir -p ~/control_ws/src &&\
 #     cd ~/control_ws/src &&\
@@ -40,15 +38,28 @@ USER $USER
 #     cd ros2_controllers &&\
 #     git reset --hard 83c494f460f1c8675f4fdd6fb8707b87e81cb197
 
+# # Splice joint_limits_interface into Moveit?
+# RUN cd ~/moveit_ws/src/ros2_control/ &&\
+#     rm -rf ./hardware_interface/* &&\
+#     git clone https://github.com/guru-florida/ros2_control.git hardware_interface &&\
+#     cd hardware_interface &&\
+#     git remote rm origin &&\
+#     git filter-branch --subdirectory-filter hardware_interface -- --all &&\
+#     git reset --hard &&\
+#     git gc --aggressive &&\
+#     git prune &&\
+#     cd ~/moveit_ws/ &&\
+#     . install/setup.sh &&\
+#     colcon build --packages-select hardware_interface
+
 # # Install Gazebo ROS2 control
-# RUN cd ~/control_ws/src &&\
-#     . ~/control_ws/install/setup.sh &&\
+# RUN mkdir -p ~/control_ws/src &&\
+#     cd ~/control_ws/src &&\
+#     . ~/moveit_ws/install/setup.sh &&\
 #     git clone https://github.com/ros-simulation/gazebo_ros2_control.git &&\
-#     cd gazebo_ros2_control &&\
-#     git reset --hard 3dfe04d412d5be4540752e9c1165ccf25d7c51fb &&\
-#     cd .. &&\
-#     . /opt/ros/foxy/setup.sh &&\
 #     colcon build --merge-install --symlink-install
+
+USER $USER
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
