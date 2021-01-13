@@ -53,11 +53,11 @@ RUN apt-get update &&\
 #     colcon build --packages-select hardware_interface
 
 # Install Gazebo ROS2 control
-RUN mkdir -p ~/control_ws/src &&\
-    cd ~/control_ws/ &&\
-    . ~/moveit_ws/install/setup.sh &&\
-    git clone -b ahcorde/update/foxy https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
-    colcon build --merge-install --symlink-install
+# RUN mkdir -p ~/control_ws/src &&\
+#     cd ~/control_ws/ &&\
+#     . ~/moveit_ws/install/setup.sh &&\
+#     git clone -b ahcorde/update/foxy https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
+#     colcon build --merge-install --symlink-install
 
 USER $USER
 
