@@ -163,6 +163,13 @@ RUN apt update && apt install --no-install-recommends -y \
     apt upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
+# Add rosbag, upgrade ros components
+RUN apt-get update &&\
+    apt-get --fix-missing install &&\
+    apt-get install ros-foxy-ros2bag ros-foxy-rosbag2-transport ros-foxy-rosbag2-storage-default-plugins -y -f &&\
+    apt-get upgrade -y &&\
+    rm -rf /var/lib/apt/lists/*
+
 # Clean
 RUN apt-get update && apt-get autoremove -y && apt-get autoclean -y
 ENV ROS_LOG_DIR=$HOME/Desktop/logs_ros
