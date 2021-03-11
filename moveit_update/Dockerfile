@@ -61,8 +61,9 @@ RUN apt-get update &&\
 
 # Add rosbag, upgrade ros components
 RUN apt-get update &&\
-    apt-get install ros-foxy-ros2bag ros-foxy-rosbag2* -y &&\
-    apt-get upgrade &&\
+    apt-get --fix-missing install &&\
+    apt-get install ros-foxy-ros2bag ros-foxy-rosbag2* -y -f &&\
+    apt-get upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
 USER $USER
