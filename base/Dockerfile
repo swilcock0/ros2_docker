@@ -105,7 +105,7 @@ ADD ./src/common/xfce/ $HOME/
 ## Install numpy (for xfce) and pip
 RUN apt-get update && apt-get install -y python
 
-RUN curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install numpy && rm get-pip.py
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install numpy && rm get-pip.py
 
 ## Configure startup and desktop
 RUN $INST_SCRIPTS/libnss_wrapper.sh
