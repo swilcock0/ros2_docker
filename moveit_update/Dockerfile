@@ -59,6 +59,12 @@ RUN apt-get update &&\
 #     git clone -b ahcorde/update/foxy https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
 #     colcon build --merge-install --symlink-install
 
+# Add rosbag, upgrade ros components
+RUN apt-get update &&\
+    apt-get install ros-foxy-ros2bag rosbag2* -y &&\
+    apt-get upgrade &&\
+    rm -rf /var/lib/apt/lists/*
+
 USER $USER
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
