@@ -31,7 +31,7 @@ USER $USER
 RUN mkdir -p ~/gazebo_ros2_control/src &&\
     cd ~/gazebo_ros2_control/ &&\
     . /opt/ros/foxy/setup.sh &&\
-    git clone -b ahcorde/update/foxy https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
+    git clone https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
     colcon build --merge-install --symlink-install
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
