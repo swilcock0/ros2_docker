@@ -22,7 +22,7 @@ RUN cd ~/moveit_ws &&\
 # Prerequisites & install debian ros2_control pkg
 RUN apt-get update &&\
     apt-get install -y ros-foxy-test-msgs libopenblas-dev &&\
-    apt-get install -y ros-foxy-ros2-control &&\
+    apt-get install -y ros-foxy-ros2-control ros-foxy-ros2-controllers &&\
     rm -rf /var/lib/apt/lists/*
 
 USER $USER
