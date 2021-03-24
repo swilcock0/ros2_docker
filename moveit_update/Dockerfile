@@ -3,6 +3,7 @@ FROM swilcock0/ros2_ubuntu:base
 LABEL maintainer "Sam Wilcock/swilcock0"
 
 USER root
+RUN echo test
 
 # Install latest version of moveit
 
