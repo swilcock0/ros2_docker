@@ -20,7 +20,7 @@ RUN /bin/bash -c ". ~/.nvm/nvm.sh &&\
     nvm install 12.16.1"
  
 RUN cd ~ &&\
-    git clone https://github.com/swilcock0/ros2-web-bridge.git
+    git clone https://github.com/RobotWebTools/ros2-web-bridge.git
 
 RUN /bin/bash -c ". /opt/ros/foxy/setup.sh &&\
     . ~/.nvm/nvm.sh &&\
