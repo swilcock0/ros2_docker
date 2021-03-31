@@ -6,7 +6,7 @@ source /opt/ros/foxy/setup.bash
 source /home/ros/ros2_ws/install/setup.bash
 source /home/ros/moveit_ws/install/setup.bash
 source /home/ros/ros2api/install/setup.bash
-source /home/ros/ros2_control_ws/install/setup.bash
+
 cd ~/ros2-web-bridge/bin
 nvm use 11.0.0
 
