@@ -12,11 +12,6 @@ RUN apt-get update -qq &&\
     cd ~/moveit_ws/src &&\
     rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y --as-root=apt:false && \
     rm -rf /var/lib/apt/lists/*
-    
-
-RUN cd ~/moveit_ws/ &&\
-    . /opt/ros/foxy/setup.sh &&\
-    colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 # Prerequisites & install debian ros2_control pkg
 RUN apt-get update &&\
