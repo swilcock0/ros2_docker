@@ -6,15 +6,13 @@ USER root
 
 # Install latest version of moveit
 
-RUN apt-get update &&\
-    mkdir -p ~/moveit_ws/src && \
-    cd ~/moveit_ws/src && \
-    wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos &&\
-    vcs import < moveit2.repos &&\
-    git clone https://github.com/ros-planning/moveit2.git &&\
-    rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y &&\
-    cd .. &&\
+COPY --from=moveit/moveit2:foxy-source /root/ws_moveit/ /home/ros/moveit_ws/
+
+RUN apt-get update -qq &&\
+    cd ~/moveit_ws/src &&\
+    rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y --as-root=apt:false && \
     rm -rf /var/lib/apt/lists/*
+    
 
 RUN cd ~/moveit_ws/ &&\
     . /opt/ros/foxy/setup.sh &&\
