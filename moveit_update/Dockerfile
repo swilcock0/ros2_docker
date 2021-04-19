@@ -1,3 +1,4 @@
+FROM moveit/moveit2:foxy-source as moveit
 FROM swilcock0/ros2_ubuntu:base
 
 LABEL maintainer "Sam Wilcock/swilcock0"
@@ -6,7 +7,7 @@ USER root
 
 # Install latest version of moveit
 
-COPY --from=moveit/moveit2:foxy-source /root/ws_moveit/ /home/ros/moveit_ws/
+COPY --from=moveit /root/ws_moveit/ /home/ros/moveit_ws/
 
 RUN apt-get update -qq &&\
     cd ~/moveit_ws/src &&\
