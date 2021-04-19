@@ -19,12 +19,6 @@ RUN apt-get update &&\
     apt-get install -y ros-foxy-ros2-control ros-foxy-ros2-controllers &&\
     rm -rf /var/lib/apt/lists/*
 
-# Fix the colcon build. This technique of cloning the built workspace and rebuilding seems faster than directly building from source
-RUN . /opt/ros/foxy/setup.sh &&\ 
-    cd /home/ros/moveit_ws &&\
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-    --ament-cmake-args -DCMAKE_BUILD_TYPE=Release --event-handlers desktop_notification- status- --cmake-clean-cache
-
 USER $USER
 
 # Install Gazebo ROS2 control
