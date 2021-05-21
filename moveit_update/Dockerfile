@@ -7,12 +7,19 @@ USER root
 
 # Install latest version of moveit
 
-COPY --from=moveit /root/ws_moveit/ /home/ros/moveit_ws/
-
-RUN apt-get update -qq &&\
-    cd ~/moveit_ws/src &&\
-    rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y --as-root=apt:false && \
+RUN apt-get update &&\
+    mkdir -p ~/moveit_ws/src && \
+    cd ~/moveit_ws/src && \
+    wget https://raw.githubusercontent.com/ros-planning/moveit2/main/moveit2.repos &&\
+    vcs import < moveit2.repos &&\
+    git clone https://github.com/AndyZe/moveit2.git -b andyz/fix_coll_checking &&\
+    rosdep install -r --from-paths . --ignore-src --rosdistro foxy -y &&\
+    cd .. &&\
     rm -rf /var/lib/apt/lists/*
+
+RUN cd ~/moveit_ws/ &&\
+    . /opt/ros/foxy/setup.sh &&\
+    colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 # Prerequisites & install debian ros2_control pkg
 RUN apt-get update &&\
