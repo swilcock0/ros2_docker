@@ -4,6 +4,10 @@ FROM ros:foxy-ros-core-focal as ros2
 
 LABEL maintainer "Sam Wilcock"
 
+USER 0
+
+RUN rm -f /etc/apt/trusted.gpg
+
 # Install sudo
 RUN apt-get update && \
     apt-get install -y sudo \
@@ -29,6 +33,8 @@ RUN groupadd $USER && \
     # Replace 1000 with your user/group id
     usermod  --uid $UID $USER && \
     groupmod --gid $GID $USER
+
+RUN sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 ### Install VScode
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
