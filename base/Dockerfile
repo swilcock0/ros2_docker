@@ -4,7 +4,7 @@ FROM ros:foxy-ros-core-focal as ros2
 
 LABEL maintainer "Sam Wilcock"
 
-USER 0
+USER root
 
 RUN rm -f /etc/apt/trusted.gpg
 
@@ -35,6 +35,7 @@ RUN groupadd $USER && \
     groupmod --gid $GID $USER
 
 RUN sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+USER $USER
 
 ### Install VScode
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
