@@ -6,8 +6,6 @@ LABEL maintainer "Sam Wilcock"
 
 USER root
 
-RUN rm -f /etc/apt/trusted.gpg
-
 # Install sudo
 RUN apt-get update && \
     apt-get install -y sudo \
