@@ -1,4 +1,3 @@
-FROM moveit/moveit2:foxy-source as moveit
 FROM swilcock0/ros2_ubuntu:base
 
 LABEL maintainer "Sam Wilcock/swilcock0"
