@@ -157,14 +157,14 @@ RUN apt update && apt install --no-install-recommends -y \
     libasio-dev \
     libtinyxml2-dev &&\
     apt install --no-install-recommends -y libcunit1-dev &&\
-    apt-get install -y ros-{ROS_DISTRO}-rqt* ros-{ROS_DISTRO}-gazebo* &&\
+    apt-get install -y ros-${ROS_DISTRO}-rqt* ros-${ROS_DISTRO}-gazebo* ros-${ROS_DISTRO}-rviz* &&\
     apt upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
 # Add rosbag, upgrade ros components
 RUN apt-get update &&\
     apt-get --fix-missing install &&\
-    apt-get install ros-{ROS_DISTRO}-ros2bag ros-{ROS_DISTRO}-rosbag2-transport ros-{ROS_DISTRO}-rosbag2-storage-default-plugins -y -f &&\
+    apt-get install ros-${ROS_DISTRO}-ros2bag ros-${ROS_DISTRO}-rosbag2-transport ros-${ROS_DISTRO}-rosbag2-storage-default-plugins -y -f &&\
     apt-get upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
