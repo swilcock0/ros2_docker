@@ -1,4 +1,4 @@
-FROM ros:galactic-ros-core-focal as ros2
+FROM ros:foxy-ros-core-focal as ros2
 
 #FROM nvidia/cuda:11.0-devel-ubuntu20.04 AS ubuntu
 
@@ -83,7 +83,7 @@ RUN $INST_SCRIPTS/tools.sh
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ## Install xvnc-server & noVNC - HTML5 based VNC viewer
-RUN apt update && apt install tigervnc-standalone-server tigervnc-common -y &&\
+RUN apt update && sudo apt install tigervnc-standalone-server tigervnc-common -y &&\
     rm -rf /var/lib/apt/lists/*
 
 RUN $INST_SCRIPTS/no_vnc.sh

@@ -10,8 +10,17 @@ RUN apt update &&\
     rm -rf /var/lib/apt/lists/*
 
 # Install moveit
+RUN mkdir -p ~/moveit/src &&\
+    cd ~/moveit/src &&\
+    . /opt/ros/${ROS_DISTRO}/setup.sh &&\
+    git clone https://github.com/ros-planning/moveit2.git -b main &&\  
+    vcs import < moveit2/moveit2.repos &&\
+    rosdep install -r --from-paths . --ignore-src --rosdistro ${ROS_DISTRO} -y &&\
+    cd .. &&\
+    colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release    
+
 RUN apt update &&\
-    apt install -y ros-galactic-moveit &&\
+    apt install -y ros-${ROS_DISTRO}-robot-state-publisher &&\
     rm -rf /var/lib/apt/lists/*
 
 # Cant remember what this patched
@@ -19,10 +28,10 @@ RUN apt-get update &&\
     apt-get install -y ros-${ROS_DISTRO}-test-msgs libopenblas-dev &&\
     rm -rf /var/lib/apt/lists/*
 
-# # Install ros2_control/ ros2_controllers (do the binary releases exist yet?? Give @bmagyar a couple weeks)
-# RUN apt-get update && \
-#     apt-get install -y ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers && \
-#     rm -rf /var/lib/apt/lists/*
+# Install ros2_control/ ros2_controllers (do the binary releases exist yet?? Give @bmagyar a couple weeks)
+RUN apt-get update && \
+    apt-get install -y ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers && \
+    rm -rf /var/lib/apt/lists/*
 
 USER $USER
 
@@ -38,12 +47,12 @@ USER $USER
 #     colcon build --merge-install --symlink-install
 
 
-# # Install Gazebo ROS2 control - this may take some debugging/dual versions of ros2-control?
-# RUN mkdir -p ~/gazebo_ros2_control/src &&\
-#     cd ~/gazebo_ros2_control/ &&\
-#     . /opt/ros/${ROS_DISTRO}/setup.sh &&\
-#     git clone https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
-#     colcon build --merge-install --symlink-install
+# Install Gazebo ROS2 control - this may take some debugging/dual versions of ros2-control?
+RUN mkdir -p ~/gazebo_ros2_control/src &&\
+    cd ~/gazebo_ros2_control/ &&\
+    . /opt/ros/${ROS_DISTRO}/setup.sh &&\
+    git clone https://github.com/ros-simulation/gazebo_ros2_control.git src &&\
+    colcon build --merge-install --symlink-install
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]

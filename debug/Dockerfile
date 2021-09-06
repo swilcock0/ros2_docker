@@ -90,14 +90,14 @@ RUN $INST_SCRIPTS/no_vnc.sh
 RUN $INST_SCRIPTS/firefox.sh
 
 ## Install xfce UI
-# RUN $INST_SCRIPTS/xfce_ui.sh && apt-get update && \
-#     apt-get install -y --no-install-recommends dbus-x11 xauth supervisor xfce4-terminal x11-xserver-utils gnome-icon-theme &&\
-#     gtk-update-icon-cache &&\
-#     rm -rf /var/lib/apt/lists/*
+RUN $INST_SCRIPTS/xfce_ui.sh && apt-get update && \
+    apt-get install -y --no-install-recommends dbus-x11 xauth supervisor xfce4-terminal x11-xserver-utils gnome-icon-theme &&\
+    gtk-update-icon-cache &&\
+    rm -rf /var/lib/apt/lists/*
 ADD ./src/common/xfce/ $HOME/
 
 # ## Install numpy (for xfce) and pip
-# RUN apt-get update && apt-get install -y python
+RUN apt-get update && apt-get install -y python
 
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install numpy && rm get-pip.py
 
@@ -113,7 +113,7 @@ RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME $HOME/Desktop
 RUN apt-get update && apt-get autoremove -y && apt-get autoclean -y
 ENV ROS_LOG_DIR=$HOME/Desktop/logs_ros
 
-USER $USER
+USER 0
 
 # Expose Tensorboard
 EXPOSE 6006
