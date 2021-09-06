@@ -1,4 +1,4 @@
-FROM ros:foxy-ros-core-focal as ros2
+FROM ros:galactic-ros-core-focal as ros2
 
 #FROM nvidia/cuda:11.0-devel-ubuntu20.04 AS ubuntu
 
@@ -49,11 +49,7 @@ RUN sudo apt-get install -y apt-transport-https && \
     #code --install-extension ms-vscode.cpptools
 
 ### VNC Installation
-LABEL io.k8s.description="Headless VNC Container with Xfce window manager, firefox and chromium" \
-      io.k8s.display-name="Headless VNC Container based on Ubuntu" \
-      io.openshift.expose-services="6901:http,5901:xvnc" \
-      io.openshift.tags="vnc, ubuntu, xfce" \
-      io.openshift.non-scalable=true
+LABEL exposed-services="6901:http, 5901:xvnc, 9090:ROS"
 
 ## Connection ports for controlling the UI:
 # VNC port:5901
@@ -87,7 +83,9 @@ RUN $INST_SCRIPTS/tools.sh
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ## Install xvnc-server & noVNC - HTML5 based VNC viewer
-RUN $INST_SCRIPTS/tigervnc.sh
+RUN apt update && apt install tigervnc-standalone-server tigervnc-common -y &&\
+    rm -rf /var/lib/apt/lists/*
+
 RUN $INST_SCRIPTS/no_vnc.sh
 
 ## Install firefox and chrome browser
@@ -159,14 +157,14 @@ RUN apt update && apt install --no-install-recommends -y \
     libasio-dev \
     libtinyxml2-dev &&\
     apt install --no-install-recommends -y libcunit1-dev &&\
-    apt-get install -y ros-foxy-rqt* ros-foxy-gazebo* &&\
+    apt-get install -y ros-{ROS_DISTRO}-rqt* ros-{ROS_DISTRO}-gazebo* &&\
     apt upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
 # Add rosbag, upgrade ros components
 RUN apt-get update &&\
     apt-get --fix-missing install &&\
-    apt-get install ros-foxy-ros2bag ros-foxy-rosbag2-transport ros-foxy-rosbag2-storage-default-plugins -y -f &&\
+    apt-get install ros-{ROS_DISTRO}-ros2bag ros-{ROS_DISTRO}-rosbag2-transport ros-{ROS_DISTRO}-rosbag2-storage-default-plugins -y -f &&\
     apt-get upgrade -y &&\
     rm -rf /var/lib/apt/lists/*
 
