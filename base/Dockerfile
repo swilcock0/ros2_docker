@@ -54,7 +54,7 @@ LABEL exposed-services="6901:http, 5901:xvnc, 9090:ROS"
 ## Connection ports for controlling the UI:
 # VNC port:5901
 # noVNC webport 6901, connect via http://IP:6901/?password=vncpassword
-ENV DISPLAY=:1 \
+ENV DISPLAY=:0 \
     VNC_PORT=5901 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
