@@ -11,12 +11,12 @@ docker build -t swilcock0/ros2_ubuntu:moveit_bridge .\moveit_bridge\.
 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-docker image tag swilcock0/ros2_ubuntu:moveit_bridge swilcock0/ros2_ubuntu:latest
+docker image tag swilcock0/ros2_ubuntu:moveit_bridge swilcock0/ros2_ubuntu:user
 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 nircmd beep 450 2000
 pause
-docker push swilcock0/ros2_ubuntu
+docker push swilcock0/ros2_ubuntu:user
 
 echo Done!

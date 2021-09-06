@@ -22,7 +22,7 @@ RUN /bin/bash -c ". ~/.nvm/nvm.sh &&\
 RUN cd ~ &&\
     git clone https://github.com/RobotWebTools/ros2-web-bridge.git
 
-RUN /bin/bash -c ". /opt/ros/foxy/setup.sh &&\
+RUN /bin/bash -c ". /opt/ros/${ROS_DISTRO}/setup.sh &&\
     . ~/.nvm/nvm.sh &&\
     cd ros2-web-bridge &&\
     npm install"
@@ -31,7 +31,7 @@ RUN /bin/bash -c ". /opt/ros/foxy/setup.sh &&\
 RUN mkdir -p ~/ros2api/src &&\
     git clone https://github.com/swilcock0/ros2api.git ros2api/src &&\
     cd ~/ros2api &&\
-    . /opt/ros/foxy/setup.sh &&\
+    . /opt/ros/${ROS_DISTRO}/setup.sh &&\
     colcon build
 
 # Clean generated messages
