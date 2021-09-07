@@ -78,7 +78,7 @@ RUN $INST_SCRIPTS/tools.sh
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ## Install xvnc-server & noVNC - HTML5 based VNC viewer
-RUN apt update && apt install supervisor xfce4 xfce4-terminal xfce4-goodies -y &&\
+RUN apt update && apt install supervisor xfce4 xfce4-terminal dbus-x11 xauth supervisor xfce4-terminal x11-xserver-utils gnome-icon-theme-y &&\
     rm -rf /var/lib/apt/lists/*
 
 RUN apt update && apt install tigervnc-standalone-server tigervnc-common -y &&\
