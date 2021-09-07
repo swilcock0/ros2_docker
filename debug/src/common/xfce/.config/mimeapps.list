@@ -1,9 +1,0 @@
-[Added Associations]
-application/x-shellscript=code.desktop;exo-terminal-emulator.desktop;
-text/x-c++src=code.desktop;
-text/x-c++hdr=code.desktop;
-application/x-yaml=code.desktop;
-
-[Default Applications]
-text/x-c++src=code.desktop
-text/x-c++hdr=code.desktop
